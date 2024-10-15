@@ -18,6 +18,7 @@ fun HomeScreen(navController: NavHostController) {
         Surface(modifier = Modifier.padding(paddingValues)) {
             Button(
                 onClick = {
+                    navController.navigate("login")
                 }
             ) {
                 Text("Go to Details")
