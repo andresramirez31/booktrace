@@ -1,3 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">booktrace</string>
+    <string name="app_name">Booktrace</string>
+
+    <!-- Login Screen -->
+    <string name="login_title">Inicio de sesion</string>
+    <string name="login_email_hint">Correo</string>
+    <string name="login_password_hint">Contraseña</string>
+    <string name="signup_button">Registrarse</string>
+    <string name="login_button">Iniciar sesion</string>
+    <string name="login_error_invalid_email">Correo invalido</string>
+    <string name="login_error_invalid_password">La contraseña debe tener al menos 6 caracteres</string>
+    <string name="login_error_credentials">Credenciales invalidas, intente de nuevo.</string>
+
+    <!-- Home Screen -->
+    <string name="home_title">Bienvenido a las recomendaciones!</string>
+    <string name="home_button_explore">Explorar libros</string>
+    <string name="home_return">Volver al inicio</string>
+
+    <!-- Recommendations Screen -->
+    <string name="recommendations_title">Libros recomendados para ti</string>
+    <string name="recommendations_empty">No hay recomendaciones en el momento</string>
+    <string name="recommendations_button_refresh">Actualizar</string>
 </resources>
