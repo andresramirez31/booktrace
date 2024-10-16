@@ -9,6 +9,9 @@ import com.booktrace.booktrace.ui.screens.HomeScreen
 import com.booktrace.booktrace.ui.screens.LoginScreen
 import com.booktrace.booktrace.ui.screens.RecommendationsScreen
 import com.booktrace.booktrace.ui.screens.SignUpScreen
+import com.booktrace.booktrace.ui.theme.BooktraceTheme
+import com.booktrace.booktrace.ui.theme.GradientBackground
+
 @Composable
 fun SetupNavGraph(navController: NavHostController) {
     NavHost(navController = navController, startDestination = Screen.Home.route) {

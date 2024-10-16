@@ -24,6 +24,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.booktrace.booktrace.R
+import com.booktrace.booktrace.ui.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -110,7 +111,7 @@ fun LoginScreen(navController: NavHostController) {
                             // Validacion de login
                             val isValidLogin = validateLogin(email, password)
                             if (isValidLogin) {
-                                navController.navigate("recommendations") // Navigate to home after successful login
+                                navController.navigate(Screen.Recommendations.route) // Navigate to home after successful login
                             } else {
                                 loginError = true // Show login error message
                             }

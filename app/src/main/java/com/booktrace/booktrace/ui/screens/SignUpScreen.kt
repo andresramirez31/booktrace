@@ -11,6 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.compose.ui.platform.LocalContext
 import android.util.Patterns
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import com.booktrace.booktrace.ui.navigation.Screen
 
 
 @Composable
@@ -75,7 +76,7 @@ fun SignUpScreen(navController: NavHostController) {
                             if (registroExitoso) {
                                 // Mostrar mensaje de éxito
                                 Toast.makeText(context, "Registro exitoso", Toast.LENGTH_SHORT).show()
-                                navController.navigate("recommendations")
+                                navController.navigate(Screen.Recommendations.route)
                             } else {
                                 // Mostrar error de guardado
                                 Toast.makeText(context, "Error al guardar el registro", Toast.LENGTH_SHORT).show()

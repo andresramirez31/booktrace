@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import com.booktrace.booktrace.R
+import com.booktrace.booktrace.ui.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,7 +34,7 @@ fun RecommendationsScreen(navController: NavHostController) {
             }
 
             Button(onClick = {
-                navController.navigate("home")
+                navController.navigate(Screen.Home.route)
             }) { Text(stringResource(R.string.home_return)) }
 
         }
