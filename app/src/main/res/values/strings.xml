@@ -3,10 +3,10 @@
     <string name="app_name">BOOKTRACE</string>
 
     <!-- Login Screen -->
-    <string name="login_title">Inicio de sesion</string>
+    <string name="login_title">Bienvenido a Booktrace!</string>
+    <string name="login_welcome">Vuelve a sumergirte en tu mundo de lectura</string>
     <string name="login_email_hint">Correo</string>
     <string name="login_password_hint">Contraseña</string>
-    <string name="signup_button">Registrarse</string>
     <string name="login_button">Iniciar sesion</string>
     <string name="login_error_invalid_email">Correo invalido</string>
     <string name="login_error_invalid_password">La contraseña debe tener al menos 6 caracteres</string>
@@ -21,4 +21,13 @@
     <string name="recommendations_title">Libros recomendados para ti</string>
     <string name="recommendations_empty">No hay recomendaciones en el momento</string>
     <string name="recommendations_button_refresh">Actualizar</string>
+
+    <!-- Sign Up Screen -->
+    <string name="signup_welcome">Crea una cuenta en Booktrace</string>
+    <string name="signup_welcome_2">Comienza tu experiencia de lectura personalizada</string>
+    <string name="signup_username">Nombre de usuario</string>
+    <string name="signup_email">you@example.com</string>
+    <string name="signup_password">Contraseña</string>
+    <string name="signup_password_2">Confirmar contraseña</string>
+    <string name="signup_button">Registrarse</string>
 </resources>

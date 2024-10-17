@@ -1,8 +1,10 @@
 package com.booktrace.booktrace.ui.screens
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,16 +14,32 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.booktrace.booktrace.R
 import com.booktrace.booktrace.ui.navigation.Screen
 import com.booktrace.booktrace.ui.theme.GradientBackground
+import com.booktrace.booktrace.ui.theme.White80
 
 @OptIn(ExperimentalMaterial3Api::class) // Opt in to use experimental features if required
 @Composable
 fun HomeScreen(navController: NavHostController) {
+
+    val configuration = LocalConfiguration.current
+
+    if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        LandscapeHomeLayout(navController)
+    } else {
+        PortraitHomeLayout(navController)
+    }
+
+}
+
+@Composable
+fun PortraitHomeLayout(navController: NavHostController){
     Scaffold(
     ) { paddingValues ->
         // Content goes here, respecting the padding values
@@ -34,7 +52,8 @@ fun HomeScreen(navController: NavHostController) {
 
                 Text(
                     text = stringResource(R.string.app_name),
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.titleLarge,
+                    color = White80
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -55,6 +74,58 @@ fun HomeScreen(navController: NavHostController) {
                     }
                 ) {
                     Text(stringResource(R.string.signup_button))
+                }
+            }
+
+        }
+    }
+}
+
+@Composable
+fun LandscapeHomeLayout(navController: NavHostController){
+    Scaffold(
+    ) { paddingValues ->
+        // Content goes here, respecting the padding values
+        GradientBackground(modifier = Modifier.padding(paddingValues)) {
+
+            Row (
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceAround,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxSize().padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+
+                    Text(
+                        text = stringResource(R.string.app_name),
+                        style = MaterialTheme.typography.titleLarge,
+                        color = White80
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Button(
+                        onClick = {
+                            navController.navigate(Screen.Login.route)
+                        }
+                    ) {
+                        Text(stringResource(R.string.login_button))
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Button(
+                        onClick = {
+                            navController.navigate(Screen.SignUp.route)
+                        }
+                    ) {
+                        Text(stringResource(R.string.signup_button))
+                    }
                 }
             }
 

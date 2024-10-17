@@ -12,7 +12,6 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.material3.*
-import androidx.compose.material3.MaterialTheme.shapes
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -21,7 +20,7 @@ private val LightColors = lightColorScheme(
     primary = Purple80,
     onPrimary = Color.White,
     secondary = Purple80,
-    background = Purple80,
+    background = White80,
     onBackground = Color.Black
 )
 
