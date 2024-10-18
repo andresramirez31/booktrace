@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.booktrace.booktrace.Inicio
-import com.booktrace.booktrace.ui.screens.LandscapeLoginLayout
 import com.booktrace.booktrace.ui.screens.LoginScreen
 import com.booktrace.booktrace.ui.screens.RecommendationsScreen
 import com.booktrace.booktrace.ui.screens.SignUpScreen
@@ -31,15 +30,6 @@ fun LightThemeLoginPreviewPortrait(){
     val navController = rememberNavController()
     BooktraceTheme(darkTheme = false) {
         LoginScreen(navController = navController)
-    }
-}
-
-@Preview(showBackground = true, name = "Landscape", widthDp = 640, heightDp = 360)
-@Composable
-fun LightThemeLoginPreviewLandscape(){
-    val navController = rememberNavController()
-    BooktraceTheme(darkTheme = false) {
-        LandscapeLoginLayout(navController = navController)
     }
 }
 

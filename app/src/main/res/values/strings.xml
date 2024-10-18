@@ -21,6 +21,7 @@
     <string name="recommendations_title">Libros recomendados para ti</string>
     <string name="recommendations_empty">No hay recomendaciones en el momento</string>
     <string name="recommendations_button_refresh">Actualizar</string>
+    <string name="logOut">Cerrar sesión</string>
 
     <!-- Sign Up Screen -->
     <string name="signup_welcome">Crea una cuenta en Booktrace</string>

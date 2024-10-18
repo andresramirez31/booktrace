@@ -16,11 +16,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.booktrace.booktrace.ui.navigation.SetupNavGraph
 import com.booktrace.booktrace.ui.theme.BooktraceTheme
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val viewModel: viewModel = viewModel()
         setContent {
             BooktraceTheme {
                Inicio()
@@ -35,8 +39,6 @@ fun Bienvenida(modifier: Modifier = Modifier) {
         text = "Bienvenido a Booktrace!",
         modifier = modifier
     )
-
-
 }
 
 @Composable
