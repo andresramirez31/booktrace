@@ -1,47 +1,58 @@
 package com.booktrace.booktrace
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class LoginviewModel: ViewModel() {
-    var correo = mutableStateOf("")
-    var contraseña = mutableStateOf("")
-    var confirmarContraseña = mutableStateOf("")
-    var cargando = mutableStateOf(false)
-    var errorLogin = mutableStateOf<String?>(null)
+class viewModel: ViewModel() {
+    private val auth: FirebaseAuth = Firebase.auth
+    private val _loading = MutableLiveData(false)
 
-    fun login(onSuccess: () -> Unit) {
-        if (validateCredentials()) {
-            if(validateContraseña()) {
-                cargando.value = true
-                errorLogin.value = null
-
-                // Simulate network call with delay
-                viewModelScope.launch {
-                    delay(2000)  // Simulating a delay for network call
-                    cargando.value = false
-                    onSuccess()
+    fun signInWithEmailAndPassword(email:String, password:String, onLoginSuccess: () -> Unit, onLoginError: () -> Unit)
+            = viewModelScope.launch {
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.d("Booktrace", "singInWithEmailAndPassword: logueado")
+                        onLoginSuccess()
+                    }
                 }
-            } else {
-                errorLogin.value = "Las contraseñas no coinciden"
-            }
-        } else {
-            errorLogin.value = "Correo o contraseña invalidos"
+                .addOnFailureListener { exception ->
+                    Log.d("Booktrace", "signInWithEmailAndPassword: ${exception.message}")
+                    onLoginError() // Llama a la función para manejar el error
+                }
+    }
+
+    fun createUserWithEmailAndPassword(
+        email: String,
+        password: String,
+        home: () -> Unit
+    ){
+        if(_loading.value == false){
+            _loading.value = true
+            auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+                    if(task.isSuccessful){
+                        home()
+                    }else{
+                        Log.d("Booktrace", "createUserWithEmailAndPassword: ${task.result.toString()}")
+                    }
+                    _loading.value = false
+                }
         }
     }
 
-    // Validation logic
-    private fun validateCredentials(): Boolean {
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(correo.value).matches() &&
-                contraseña.value.length >= 6
+    fun signOut() {
+        auth.signOut()
     }
-
-    private fun validateContraseña(): Boolean {
-        return contraseña.value == confirmarContraseña.value
-    }
-
-
-
 }

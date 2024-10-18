@@ -1,6 +1,7 @@
 package com.booktrace.booktrace.ui.screens
 
 import android.content.res.Configuration
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,55 +20,46 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.booktrace.booktrace.R
 import com.booktrace.booktrace.ui.navigation.Screen
+import com.booktrace.booktrace.viewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecommendationsScreen(navController: NavHostController) {
-
+fun RecommendationsScreen(navController: NavHostController,
+                          viewModel: viewModel = viewModel()) {
     val configuration = LocalConfiguration.current
-
-    if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-        LandscapeRecommendationsLayout(navController)
-    } else {
-        PortraitRecommendationsLayout(navController)
-    }
-
+    val context = LocalContext.current
+    RecommendationsLayout(
+        orientation = configuration.orientation,
+        onNavigateBack = { viewModel.signOut()
+            Toast.makeText(context, "Cierre de sesión exitoso", Toast.LENGTH_SHORT).show()
+            navController.popBackStack(Screen.Home.route, inclusive = false)
+            navController.navigate(Screen.Home.route)}
+    )
 }
 
 @Composable
-fun PortraitRecommendationsLayout(navController: NavHostController){
-    Scaffold(
-
-    ) { paddingValues ->
+fun RecommendationsLayout(orientation: Int, onNavigateBack: () -> Unit) {
+    Scaffold { paddingValues ->
         Surface(modifier = Modifier.padding(paddingValues)) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-
-                Text(stringResource(R.string.recommendations_title), modifier = Modifier.padding(bottom = 16.dp), style = MaterialTheme.typography.headlineSmall)
-
-                LazyColumn {
-                    items(listOf("Book 1", "Book 2", "Book 3")) { book ->
-                        Text(text = book, modifier = Modifier.padding(bottom = 8.dp))
+            when (orientation) {
+                Configuration.ORIENTATION_LANDSCAPE -> {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceAround,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        RecommendationsContent(onNavigateBack)
                     }
                 }
-
-                Button(onClick = {
-                    navController.navigate(Screen.Home.route)
-                }) {
-                    Text(
-                        stringResource(R.string.home_return),
-                        modifier = Modifier.padding(top = 16.dp)
-                    )
+                else -> {
+                    RecommendationsContent(onNavigateBack)
                 }
             }
         }
@@ -75,48 +67,31 @@ fun PortraitRecommendationsLayout(navController: NavHostController){
 }
 
 @Composable
-fun LandscapeRecommendationsLayout(navController: NavHostController){
-    Scaffold(
+fun RecommendationsContent(onNavigateBack: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ){
+        Text(
+            stringResource(R.string.recommendations_title),
+            modifier = Modifier.padding(bottom = 16.dp),
+            style = MaterialTheme.typography.headlineSmall
+        )
 
-    ) { paddingValues ->
-        Surface(modifier = Modifier.padding(paddingValues)) {
-            Row (
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.SpaceAround,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-
-                    Text(
-                        stringResource(R.string.recommendations_title),
-                        modifier = Modifier.padding(bottom = 16.dp),
-                        style = MaterialTheme.typography.headlineSmall
-                    )
-
-                    LazyColumn {
-                        items(listOf("Book 1", "Book 2", "Book 3")) { book ->
-                            Text(text = book, modifier = Modifier.padding(bottom = 8.dp))
-                        }
-                    }
-
-                    Button(onClick = {
-                        navController.navigate(Screen.Home.route)
-                    }) {
-                        Text(
-                            stringResource(R.string.home_return),
-                            modifier = Modifier.padding(top = 16.dp)
-                        )
-                    }
-                }
+        LazyColumn {
+            items(listOf("Book 1", "Book 2", "Book 3")) { book ->
+                Text(text = book, modifier = Modifier.padding(bottom = 8.dp))
             }
+        }
+
+        Button(onClick = onNavigateBack)
+        {
+            Text(
+                stringResource(R.string.logOut)
+            )
         }
     }
 }
