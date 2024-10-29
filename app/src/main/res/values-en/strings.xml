@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BOOKTRACE</string>
+
+    <!-- Login Screen -->
+    <string name="login_title">Welcome to Booktrace!</string>
+    <string name="login_welcome">Dive into the marvelous world of reading!</string>
+    <string name="login_email_hint">Email</string>
+    <string name="login_password_hint">Password</string>
+    <string name="login_button">Login</string>
+    <string name="login_error_invalid_email">Wrong email</string>
+    <string name="login_error_invalid_password">The password must have at least 6 characters</string>
+    <string name="login_error_credentials">Wrong credentials. Try again!</string>
+
+    <!-- Home Screen -->
+    <string name="home_title">Welcome to the recommendations page!</string>
+    <string name="home_button_explore">Browse books</string>
+    <string name="home_return">Back to home screen</string>
+
+    <!-- Recommendations Screen -->
+    <string name="recommendations_title">Recommended books just for you</string>
+    <string name="recommendations_empty">No recommendations at the moment</string>
+    <string name="recommendations_button_refresh">Refresh</string>
+    <string name="logOut">Log out</string>
+
+    <!-- Sign Up Screen -->
+    <string name="signup_welcome">Sign up on Booktrace</string>
+    <string name="signup_welcome_2">Jump start to your personalized reading experience.</string>
+    <string name="signup_username">Username</string>
+    <string name="signup_email">you@example.com</string>
+    <string name="signup_password">Password</string>
+    <string name="signup_password_2">Password Confirmation</string>
+    <string name="signup_button">Sign Up</string>
+</resources>
