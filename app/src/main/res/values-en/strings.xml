@@ -22,6 +22,11 @@
     <string name="recommendations_empty">No recommendations at the moment</string>
     <string name="recommendations_button_refresh">Refresh</string>
     <string name="logOut">Log out</string>
+    <string name="profile">Profile</string>
+    <string name="help">Help</string>
+    <string name="help_message">Here you can see the books recommended for you</string>
+    <string name="logout_message">Successful logout</string>
+    <string name="enjoy">Enjoy reading!</string>
 
     <!-- Sign Up Screen -->
     <string name="signup_welcome">Sign up on Booktrace</string>

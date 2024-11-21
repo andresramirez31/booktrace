@@ -22,6 +22,11 @@
     <string name="recommendations_empty">No hay recomendaciones en el momento</string>
     <string name="recommendations_button_refresh">Actualizar</string>
     <string name="logOut">Cerrar sesión</string>
+    <string name="profile">Perfil</string>
+    <string name="help">Ayuda</string>
+    <string name="help_message">Aquí puedes ver los libros recomendados para ti</string>
+    <string name="logout_message">Cierre de sesión exitoso</string>
+    <string name="enjoy">¡Disfruta tu lectura!</string>
 
     <!-- Sign Up Screen -->
     <string name="signup_welcome">Crea una cuenta en Booktrace</string>

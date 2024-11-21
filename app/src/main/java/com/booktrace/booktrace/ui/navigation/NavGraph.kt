@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.booktrace.booktrace.ui.screens.HomeScreen
 import com.booktrace.booktrace.ui.screens.LoginScreen
+import com.booktrace.booktrace.ui.screens.ProfileScreen
 import com.booktrace.booktrace.ui.screens.RecommendationsScreen
 import com.booktrace.booktrace.ui.screens.SignUpScreen
 import com.booktrace.booktrace.ui.theme.BooktraceTheme
@@ -38,6 +39,9 @@ fun SetupNavGraph(navController: NavHostController,
         }
         composable(route = Screen.SignUp.route) {
             SignUpScreen(navController = navController)
+        }
+        composable(route = Screen.Profile.route) {
+            ProfileScreen(navController = navController)
         }
     }
 

@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.booktrace.booktrace.ui.model.Book
 import com.booktrace.booktrace.ui.model.User
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -83,6 +84,10 @@ class viewModel: ViewModel() {
 
     fun signOut() {
         auth.signOut()
+    }
+
+    fun getCurrentUser(): FirebaseUser? {
+        return auth.currentUser
     }
 
     private fun createUser(displayName: String?) {

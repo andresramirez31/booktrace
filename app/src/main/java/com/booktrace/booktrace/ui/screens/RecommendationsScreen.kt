@@ -13,13 +13,21 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -38,25 +46,29 @@ import com.booktrace.booktrace.ui.navigation.Screen
 import com.booktrace.booktrace.viewModel
 
 @Composable
-fun RecommendationsScreen(navController: NavHostController,
-                          viewModel: viewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
+fun RecommendationsScreen(
+    navController: NavHostController,
+    viewModel: viewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+) {
     val configuration = LocalConfiguration.current
     val context = LocalContext.current
 
-    RecommendationsLayout(
-        orientation = configuration.orientation,
-        onNavigateBack = { viewModel.signOut()
-            Toast.makeText(context, "Cierre de sesión exitoso", Toast.LENGTH_SHORT).show()
-            navController.popBackStack(Screen.Home.route, inclusive = false)
-            navController.navigate(Screen.Home.route)}
-    )
-}
-
-@Composable
-fun RecommendationsLayout(orientation: Int, onNavigateBack: () -> Unit) {
-    Scaffold { paddingValues ->
+    Scaffold(
+        topBar = {
+            RecommendationsTopBar(
+                onProfileClick = { navController.navigate(Screen.Profile.route) },
+                onHelpClick = { Toast.makeText(context, R.string.help_message, Toast.LENGTH_LONG).show() },
+                onLogOutClick = {
+                    viewModel.signOut()
+                    Toast.makeText(context, R.string.logout_message, Toast.LENGTH_SHORT).show()
+                    navController.popBackStack(Screen.Home.route, inclusive = false)
+                    navController.navigate(Screen.Home.route)
+                },
+            )
+        }
+    ) { paddingValues ->
         Surface(modifier = Modifier.padding(paddingValues)) {
-            when (orientation) {
+            when (configuration.orientation) {
                 Configuration.ORIENTATION_LANDSCAPE -> {
                     Row(
                         modifier = Modifier
@@ -65,83 +77,119 @@ fun RecommendationsLayout(orientation: Int, onNavigateBack: () -> Unit) {
                         horizontalArrangement = Arrangement.SpaceAround,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        RecommendationsContent(onNavigateBack)
+                        RecommendationsContent()
                     }
                 }
                 else -> {
-                    RecommendationsContent(onNavigateBack)
+                    RecommendationsContent()
                 }
             }
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RecommendationsContent(onNavigateBack: () -> Unit,
-                           viewModel: viewModel = viewModel()
+fun RecommendationsTopBar(
+    onProfileClick: () -> Unit,
+    onHelpClick: () -> Unit,
+    onLogOutClick: () -> Unit,
+    viewModel: viewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
-    val books by viewModel.bookList.collectAsStateWithLifecycle()
+    val user = viewModel.getCurrentUser()
+    val userName = user?.displayName ?: "displayName"
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ){
-        Text(
-            stringResource(R.string.recommendations_title),
-            modifier = Modifier.padding(bottom = 16.dp),
-            style = MaterialTheme.typography.headlineSmall
-        )
+    TopAppBar(
+        title = {
+            Column {
+                Text(
+                    text = stringResource(R.string.enjoy),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+                Text(
+                    text = userName,
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            titleContentColor = MaterialTheme.colorScheme.onPrimary,
+            actionIconContentColor = MaterialTheme.colorScheme.onPrimary
+        ),
+        navigationIcon = {
+            IconButton(onClick = onProfileClick) {
+                Icon(
+                    imageVector = Icons.Default.AccountCircle,
+                    contentDescription = stringResource(R.string.profile),
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+        },
+        actions = {
 
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2), // 2 columns
-            modifier = Modifier.padding(16.dp)
-        ) {
-            items(books) { book ->
-                Card(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .fillMaxWidth(),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        AsyncImage(
-                            model = book.coverImageUrl,
-                            contentDescription = book.title,
-                            modifier = Modifier
-                                .size(150.dp)
-                                .clip(RoundedCornerShape(4.dp)),
-                            contentScale = ContentScale.Crop
-                        )
+            IconButton(onClick = onHelpClick) {
+                Icon(
+                    imageVector = Icons.Default.Info,
+                    contentDescription = stringResource(R.string.help)
+                )
+            }
 
-                        Text(
-                            text = book.title,
-                            style = MaterialTheme.typography.bodyMedium,
-                            modifier = Modifier.padding(top = 8.dp)
-                        )
-
-                        Text(
-                            text = book.author,
-                            style = MaterialTheme.typography.bodySmall,
-                            modifier = Modifier.padding(top = 4.dp)
-                        )
-                    }
-                }
+            IconButton(onClick = onLogOutClick) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ExitToApp,
+                    contentDescription = stringResource(R.string.logOut)
+                )
             }
         }
+    )
+}
 
-        Button(onClick = onNavigateBack)
-        {
-            Text(
-                stringResource(R.string.logOut)
-            )
+@Composable
+fun RecommendationsContent(viewModel: viewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
+    val books by viewModel.bookList.collectAsStateWithLifecycle()
+
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2), // 2 columnas
+        modifier = Modifier.padding(16.dp)
+    ) {
+        items(books) { book ->
+            Card(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth(),
+                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    AsyncImage(
+                        model = book.coverImageUrl,
+                        contentDescription = book.title,
+                        modifier = Modifier
+                            .size(150.dp)
+                            .clip(RoundedCornerShape(8.dp)),
+                        contentScale = ContentScale.Crop
+                    )
+
+                    Text(
+                        text = book.title,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
+
+                    Text(
+                        text = book.author,
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                }
+            }
         }
     }
 }
