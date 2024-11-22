@@ -29,7 +29,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -96,8 +100,15 @@ fun RecommendationsTopBar(
     onLogOutClick: () -> Unit,
     viewModel: viewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
-    val user = viewModel.getCurrentUser()
-    val userName = user?.displayName ?: "displayName"
+    var displayName by remember { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchDisplayName { name ->
+            displayName = name
+        }
+    }
+
+    val userName = displayName ?: "displayName"
 
     TopAppBar(
         title = {

@@ -82,6 +82,34 @@ class viewModel: ViewModel() {
         }
     }
 
+    fun fetchDisplayName(
+        onResult: (String?) -> Unit
+    ) {
+        val userId = auth.currentUser?.uid
+        if (userId != null) {
+            FirebaseFirestore.getInstance().collection("users")
+                .whereEqualTo("user_id", userId)
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    if (!querySnapshot.isEmpty) {
+                        val displayName = querySnapshot.documents[0].getString("display_name")
+                        Log.d("Booktrace", "User's displayName: $displayName")
+                        onResult(displayName)
+                    } else {
+                        Log.d("Booktrace", "No se encontro el usuario.")
+                        onResult(null)
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.e("Booktrace", "Error al buscar el usuario: $exception")
+                    onResult(null)
+                }
+        } else {
+            Log.d("Booktrace", "El usuario no esta logueado.")
+            onResult(null)
+        }
+    }
+
     fun signOut() {
         auth.signOut()
     }
