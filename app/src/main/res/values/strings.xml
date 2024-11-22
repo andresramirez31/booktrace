@@ -41,4 +41,10 @@
     <string name="error_invalid_email">Correo electrónico inválido</string>
     <string name="error_passwords_do_not_match">Las contraseñas no coinciden</string>
     <string name="error_empty_fields">Todos los campos son obligatorios</string>
+
+    <!-- Profile Screen -->
+    <string name="profile_welcome">Bienvenido/a</string>
+    <string name="books">libros</string>
+    <string name="help_message_profile">Aquí puedes ver la información de tu cuenta</string>
+    <string name="refresh">refresh</string>
 </resources>

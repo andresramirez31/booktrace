@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -61,6 +62,7 @@ fun RecommendationsScreen(
         topBar = {
             RecommendationsTopBar(
                 onProfileClick = { navController.navigate(Screen.Profile.route) },
+                onRefreshClick = { navController.navigate(Screen.Recommendations.route) },
                 onHelpClick = { Toast.makeText(context, R.string.help_message, Toast.LENGTH_LONG).show() },
                 onLogOutClick = {
                     viewModel.signOut()
@@ -96,6 +98,7 @@ fun RecommendationsScreen(
 @Composable
 fun RecommendationsTopBar(
     onProfileClick: () -> Unit,
+    onRefreshClick: () -> Unit,
     onHelpClick: () -> Unit,
     onLogOutClick: () -> Unit,
     viewModel: viewModel = androidx.lifecycle.viewmodel.compose.viewModel()
@@ -108,7 +111,7 @@ fun RecommendationsTopBar(
         }
     }
 
-    val userName = displayName ?: "displayName"
+    val userName = displayName ?: ""
 
     TopAppBar(
         title = {
@@ -140,6 +143,12 @@ fun RecommendationsTopBar(
             }
         },
         actions = {
+            IconButton(onClick = onRefreshClick) {
+                Icon(
+                    imageVector = Icons.Default.Refresh,
+                    contentDescription = stringResource(R.string.refresh)
+                )
+            }
 
             IconButton(onClick = onHelpClick) {
                 Icon(

@@ -41,4 +41,11 @@
     <string name="error_invalid_email">Invalid email</string>
     <string name="error_passwords_do_not_match">Passwords do not match</string>
     <string name="error_empty_fields">All fields are required</string>
+
+    <!-- Profile Screen -->
+    <string name="profile_welcome">Welcome</string>
+    <string name="books">books</string>
+    <string name="help_message_profile">Here you can see your account information</string>
+    <string name="refresh">refresh</string>
+
 </resources>
