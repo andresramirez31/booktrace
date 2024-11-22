@@ -4,13 +4,13 @@
 
     <!-- Login Screen -->
     <string name="login_title">Bienvenido a Booktrace!</string>
-    <string name="login_welcome">Vuelve a sumergirte en tu mundo de lectura</string>
+    <string name="login_welcome">¡Vuelve a sumergirte en tu mundo de lectura!</string>
     <string name="login_email_hint">Correo</string>
     <string name="login_password_hint">Contraseña</string>
     <string name="login_button">Iniciar sesion</string>
     <string name="login_error_invalid_email">Correo invalido</string>
     <string name="login_error_invalid_password">La contraseña debe tener al menos 6 caracteres</string>
-    <string name="login_error_credentials">Credenciales invalidas, intente de nuevo.</string>
+    <string name="login_error_credentials">Credenciales invalidas, intente de nuevo</string>
 
     <!-- Home Screen -->
     <string name="home_title">Bienvenido a las recomendaciones!</string>
@@ -30,10 +30,15 @@
 
     <!-- Sign Up Screen -->
     <string name="signup_welcome">Crea una cuenta en Booktrace</string>
-    <string name="signup_welcome_2">Comienza tu experiencia de lectura personalizada</string>
+    <string name="signup_welcome_2">Comienza tu experiencia de lectura personalizada.</string>
     <string name="signup_username">Nombre de usuario</string>
     <string name="signup_email">you@example.com</string>
     <string name="signup_password">Contraseña</string>
     <string name="signup_password_2">Confirmar contraseña</string>
     <string name="signup_button">Registrarse</string>
+    <string name="verification_required_message">Se ha enviado un correo de verificación, verifica tu correo antes de continuar</string>
+    <string name="signup_success">Registro exitoso</string>
+    <string name="error_invalid_email">Correo electrónico inválido</string>
+    <string name="error_passwords_do_not_match">Las contraseñas no coinciden</string>
+    <string name="error_empty_fields">Todos los campos son obligatorios</string>
 </resources>

@@ -24,7 +24,8 @@ fun ProfileScreen(navController: NavController,
             viewModel.signInWithEmailAndPassword(email,
                 password,
                 onLoginSuccess = { navController.navigate(Screen.Recommendations.route) },
-                onLoginError = { loginError = true })
+                onLoginError = { loginError = true },
+                onEmailNotVerified = { loginError = true })
         }
     )
 }

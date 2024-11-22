@@ -36,4 +36,9 @@
     <string name="signup_password">Password</string>
     <string name="signup_password_2">Password Confirmation</string>
     <string name="signup_button">Sign Up</string>
+    <string name="verification_required_message">A verification email has been sent, please check your email before continuing</string>
+    <string name="signup_success">Successful sign up</string>
+    <string name="error_invalid_email">Invalid email</string>
+    <string name="error_passwords_do_not_match">Passwords do not match</string>
+    <string name="error_empty_fields">All fields are required</string>
 </resources>

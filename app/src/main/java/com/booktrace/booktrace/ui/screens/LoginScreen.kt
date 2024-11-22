@@ -48,7 +48,8 @@ fun LoginScreen(navController: NavController,
             viewModel.signInWithEmailAndPassword(email,
                 password,
                 onLoginSuccess = { navController.navigate(Screen.Recommendations.route) },
-                onLoginError = { loginError = true })
+                onLoginError = { loginError = true },
+                onEmailNotVerified = { loginError = true })
         }
     )
 }
@@ -73,7 +74,6 @@ fun LoginLayout(orientation: Int,
             ) {
                 when (orientation) {
                     Configuration.ORIENTATION_LANDSCAPE -> {
-                        // Disposición para landscape
                         Row(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -95,7 +95,6 @@ fun LoginLayout(orientation: Int,
                         }
                     }
                     else -> {
-                        // Disposición para portrait
                         Column(
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally,
@@ -175,7 +174,6 @@ fun LoginInputColumn(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Campo de Email
         OutlinedTextField(
             value = email,
             onValueChange = onEmailChanged,
@@ -201,7 +199,6 @@ fun LoginInputColumn(
             )
         }
 
-        // Campo de contrasena
         OutlinedTextField(
             value = password,
             onValueChange = onPasswordChanged,
@@ -227,7 +224,7 @@ fun LoginInputColumn(
                 style = MaterialTheme.typography.bodySmall
             )
         }
-        // Login Error Message
+
         if (loginError) {
             Text(
                 text = stringResource(R.string.login_error_credentials),

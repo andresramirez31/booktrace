@@ -12,6 +12,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.compose.ui.platform.LocalContext
 import android.util.Patterns
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -27,15 +29,31 @@ fun SignUpScreen(navController: NavHostController,
                  viewModel: viewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
     val configuration = LocalConfiguration.current
+    val context = LocalContext.current
 
     SignUpLayout(
         orientation = configuration.orientation,
-        onDone = {displayName, email, password ->
-            viewModel.createUserWithEmailAndPassword(displayName, email, password) {
-                navController.navigate(Screen.Recommendations.route)
-            }
-        })
+        onDone = { displayName, email, password ->
+            viewModel.createUserWithEmailAndPassword(
+                displayName = displayName,
+                email = email,
+                password = password,
+                onVerificationRequired = {
+                    Toast.makeText(
+                        context,
+                        R.string.verification_required_message,
+                        Toast.LENGTH_LONG
+                    ).show()
+                    navController.navigate(Screen.Login.route)
+                },
+                onError = { errorMessage ->
+                    Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+                }
+            )
+        }
+    )
 }
+
 
 @Composable
 fun SignUpLayout(orientation: Int,
@@ -48,56 +66,73 @@ fun SignUpLayout(orientation: Int,
 
     val context = LocalContext.current
 
-    when (orientation) {
-        Configuration.ORIENTATION_LANDSCAPE -> {
-            Row(
+    Scaffold { paddingValues ->
+        Surface(modifier = Modifier.padding(paddingValues)) {
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.SpaceAround,
-                verticalAlignment = Alignment.CenterVertically
+                    .padding(16.dp)
             ) {
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    SignUpWelcomeText()
-                    SignUpForm(
-                        displayName, email, password, confirmarContraseña,
-                        onDisplayNameChange = { displayName = it },
-                        onCorreoChange = { email = it },
-                        onContraseñaChange = { password = it },
-                        onConfirmarContraseñaChange = { confirmarContraseña = it },
-                        onRegistrarseClick = {
-                            checkSingUp(displayName, email, password, confirmarContraseña, context, onDone)
-                        },
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-            }
-        }
-        else -> { // Portrait
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                SignUpWelcomeText()
-                SignUpForm(
-                    displayName, email, password, confirmarContraseña,
-                    onDisplayNameChange = { displayName = it },
-                    onCorreoChange = { email = it },
-                    onContraseñaChange = { password = it },
-                    onConfirmarContraseñaChange = { confirmarContraseña = it },
-                    onRegistrarseClick = {
-                        checkSingUp(displayName, email, password, confirmarContraseña, context, onDone)
+                when (orientation) {
+                    Configuration.ORIENTATION_LANDSCAPE -> {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(16.dp),
+                            horizontalArrangement = Arrangement.SpaceAround,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column { SignUpWelcomeText() }
+                                SignUpForm(
+                                    displayName, email, password, confirmarContraseña,
+                                    onDisplayNameChange = { displayName = it },
+                                    onCorreoChange = { email = it },
+                                    onContraseñaChange = { password = it },
+                                    onConfirmarContraseñaChange = { confirmarContraseña = it },
+                                    onRegistrarseClick = {
+                                        checkSingUp(
+                                            displayName,
+                                            email,
+                                            password,
+                                            confirmarContraseña,
+                                            context,
+                                            onDone
+                                        )
+                                    },
+                                    modifier = Modifier.weight(1f)
+                                )
+                        }
                     }
-                )
+                    else -> {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(16.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            SignUpWelcomeText()
+                            SignUpForm(
+                                displayName, email, password, confirmarContraseña,
+                                onDisplayNameChange = { displayName = it },
+                                onCorreoChange = { email = it },
+                                onContraseñaChange = { password = it },
+                                onConfirmarContraseñaChange = { confirmarContraseña = it },
+                                onRegistrarseClick = {
+                                    checkSingUp(
+                                        displayName,
+                                        email,
+                                        password,
+                                        confirmarContraseña,
+                                        context,
+                                        onDone
+                                    )
+                                }
+                            )
+                        }
+                    }
+                }
+
             }
         }
     }
@@ -110,7 +145,6 @@ fun SignUpWelcomeText() {
         style = MaterialTheme.typography.headlineSmall,
         modifier = Modifier.padding(bottom = 12.dp)
     )
-
     Text(
         text = stringResource(R.string.signup_welcome_2),
         style = MaterialTheme.typography.bodySmall,
@@ -132,50 +166,59 @@ fun SignUpForm(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    Column(modifier = modifier) {
-        OutlinedTextField(
-            value = displayName,
-            onValueChange = onDisplayNameChange,
-            label = { Text(stringResource(R.string.signup_username), style= MaterialTheme.typography.labelSmall) },
-            textStyle = MaterialTheme.typography.bodySmall,
-            modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
-            shape = MaterialTheme.shapes.medium
-        )
-
-        OutlinedTextField(
-            value = email,
-            onValueChange = onCorreoChange,
-            label = { Text(stringResource(R.string.signup_email), style= MaterialTheme.typography.labelSmall) },
-            textStyle = MaterialTheme.typography.bodySmall,
-            modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
-            shape = MaterialTheme.shapes.medium
-        )
-
-        OutlinedTextField(
-            value = password,
-            onValueChange = onContraseñaChange,
-            label = { Text(stringResource(R.string.signup_password), style= MaterialTheme.typography.labelSmall) },
-            textStyle = MaterialTheme.typography.bodySmall,
-            visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
-            shape = MaterialTheme.shapes.medium
-        )
-
-        OutlinedTextField(
-            value = confirmarContraseña,
-            onValueChange = onConfirmarContraseñaChange,
-            label = { Text(stringResource(R.string.signup_password_2), style= MaterialTheme.typography.labelSmall) },
-            textStyle = MaterialTheme.typography.bodySmall,
-            visualTransformation = PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth().padding(bottom = 32.dp),
-            shape = MaterialTheme.shapes.medium
-        )
-
-        Button(
-            onClick = onRegistrarseClick,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Registrarse")
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(1),
+        modifier = Modifier.padding(16.dp)
+    ) {
+        item {
+            OutlinedTextField(
+                value = displayName,
+                onValueChange = onDisplayNameChange,
+                label = { Text(stringResource(R.string.signup_username), style= MaterialTheme.typography.labelSmall) },
+                textStyle = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+                shape = MaterialTheme.shapes.medium
+            )
+        }
+        item {
+            OutlinedTextField(
+                value = email,
+                onValueChange = onCorreoChange,
+                label = { Text(stringResource(R.string.signup_email), style= MaterialTheme.typography.labelSmall) },
+                textStyle = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+                shape = MaterialTheme.shapes.medium
+            )
+        }
+        item {
+            OutlinedTextField(
+                value = password,
+                onValueChange = onContraseñaChange,
+                label = { Text(stringResource(R.string.signup_password), style= MaterialTheme.typography.labelSmall) },
+                textStyle = MaterialTheme.typography.bodySmall,
+                visualTransformation = PasswordVisualTransformation(),
+                modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+                shape = MaterialTheme.shapes.medium
+            )
+        }
+        item {
+            OutlinedTextField(
+                value = confirmarContraseña,
+                onValueChange = onConfirmarContraseñaChange,
+                label = { Text(stringResource(R.string.signup_password_2), style= MaterialTheme.typography.labelSmall) },
+                textStyle = MaterialTheme.typography.bodySmall,
+                visualTransformation = PasswordVisualTransformation(),
+                modifier = Modifier.fillMaxWidth().padding(bottom = 32.dp),
+                shape = MaterialTheme.shapes.medium
+            )
+        }
+        item {
+            Button(
+                onClick = onRegistrarseClick,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(stringResource(R.string.signup_button))
+            }
         }
     }
 }
@@ -188,18 +231,15 @@ fun checkSingUp(displayName: String, email: String, password: String, confirmarC
     if (displayName.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && confirmarContraseña.isNotEmpty()) {
         if (password == confirmarContraseña) {
             if (esCorreoValido(email)) {
-                Toast.makeText(context, "Registro exitoso", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, R.string.signup_success, Toast.LENGTH_SHORT).show()
                 onDone(displayName, email, password)
             } else {
-                // Mostrar error de correo inválido
-                Toast.makeText(context, "Correo electrónico inválido", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, R.string.error_invalid_email, Toast.LENGTH_SHORT).show()
             }
         } else {
-            // Mostrar error de contraseñas no coincidentes
-            Toast.makeText(context, "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, R.string.error_passwords_do_not_match, Toast.LENGTH_SHORT).show()
         }
     } else {
-        // Mostrar error de campos vacíos
-        Toast.makeText(context, "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, R.string.error_empty_fields, Toast.LENGTH_SHORT).show()
     }
 }

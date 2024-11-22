@@ -43,39 +43,62 @@ class viewModel: ViewModel() {
     }
 
     fun signInWithEmailAndPassword(
-        email:String,
-        password:String,
+        email: String,
+        password: String,
         onLoginSuccess: () -> Unit,
-        onLoginError: () -> Unit)
-            = viewModelScope.launch {
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Log.d("Booktrace", "singInWithEmailAndPassword: logueado")
-                    onLoginSuccess()
+        onEmailNotVerified: () -> Unit,
+        onLoginError: (String) -> Unit
+    ) {
+        viewModelScope.launch {
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val user = auth.currentUser
+                        if (user?.isEmailVerified == true) {
+                            Log.d("Booktrace", "signInWithEmailAndPassword: logueado")
+                            onLoginSuccess()
+                        } else {
+                            Log.d("Booktrace", "signInWithEmailAndPassword: email no verificado")
+                            auth.signOut()
+                            onEmailNotVerified()
+                        }
+                    } else {
+                        Log.d("Booktrace", "signInWithEmailAndPassword: ${task.exception?.message}")
+                        onLoginError(task.exception?.message ?: "Error desconocido.")
+                    }
                 }
-            }
-            .addOnFailureListener { exception ->
-                Log.d("Booktrace", "signInWithEmailAndPassword: ${exception.message}")
-                onLoginError() // Llama a la función para manejar el error
-            }
+        }
     }
 
     fun createUserWithEmailAndPassword(
         displayName: String?,
         email: String,
         password: String,
-        onLoginSuccess: () -> Unit
-    ){
-        if(_loading.value == false){
+        onVerificationRequired: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        if (_loading.value == false) {
             _loading.value = true
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
-                    if(task.isSuccessful){
-                        createUser(displayName)
-                        onLoginSuccess()
-                    }else{
-                        Log.d("Booktrace", "createUserWithEmailAndPassword: ${task.result.toString()}")
+                    if (task.isSuccessful) {
+                        val user = auth.currentUser
+                        user?.let {
+                            it.sendEmailVerification()
+                                .addOnCompleteListener { emailTask ->
+                                    if (emailTask.isSuccessful) {
+                                        Log.d("Booktrace", "Verification email sent to ${user.email}")
+                                        createUser(displayName)
+                                        onVerificationRequired()
+                                    } else {
+                                        Log.d("Booktrace", "Error sending email verification: ${emailTask.exception}")
+                                        onError("Error enviando el correo de verificación.")
+                                    }
+                                }
+                        }
+                    } else {
+                        Log.d("Booktrace", "createUserWithEmailAndPassword: ${task.exception?.message}")
+                        onError(task.exception?.message ?: "Error desconocido.")
                     }
                     _loading.value = false
                 }

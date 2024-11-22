@@ -77,11 +77,11 @@ fun RecommendationsScreen(
                         horizontalArrangement = Arrangement.SpaceAround,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        RecommendationsContent()
+                        RecommendationsContent(columns = 4)
                     }
                 }
                 else -> {
-                    RecommendationsContent()
+                    RecommendationsContent(columns = 2)
                 }
             }
         }
@@ -148,11 +148,13 @@ fun RecommendationsTopBar(
 }
 
 @Composable
-fun RecommendationsContent(viewModel: viewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
+fun RecommendationsContent(viewModel: viewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+                           columns: Int
+) {
     val books by viewModel.bookList.collectAsStateWithLifecycle()
 
     LazyVerticalGrid(
-        columns = GridCells.Fixed(2), // 2 columnas
+        columns = GridCells.Fixed(columns),
         modifier = Modifier.padding(16.dp)
     ) {
         items(books) { book ->

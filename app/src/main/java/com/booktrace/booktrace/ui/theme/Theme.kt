@@ -34,10 +34,9 @@ private val DarkColors = darkColorScheme(
 
 val MetallicPurpleGradient = Brush.verticalGradient(
     colors = listOf(
-        Color(0xFF4B0082), // Dark Indigo
-        Color(0xFF6A0DAD), // Darker Metallic Purple
-        Color(0xFF8A2BE2), // Metallic Purple
-        Color(0xFF9B59B6), // Lighter Purple // Medium Violet
+        Color(0xFF6B2FCC),
+        Color(0xFF994CF1),
+        Color(0xFFAB79FF),
     )
 )
 
