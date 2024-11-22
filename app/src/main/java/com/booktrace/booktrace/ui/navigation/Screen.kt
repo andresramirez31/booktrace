@@ -6,4 +6,5 @@ sealed class Screen(val route: String) {
     object Recommendations : Screen("recommendations")
     object SignUp : Screen("signup")
     object Profile : Screen("profile")
+
 }

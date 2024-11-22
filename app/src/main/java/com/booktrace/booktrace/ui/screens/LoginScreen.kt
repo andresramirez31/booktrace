@@ -41,6 +41,8 @@ fun LoginScreen(navController: NavController,
     val configuration = LocalConfiguration.current
     var loginError by remember { mutableStateOf(false) }
 
+
+
     LoginLayout(
         orientation = configuration.orientation,
         loginError = loginError,
@@ -64,6 +66,8 @@ fun LoginLayout(orientation: Int,
 
     var emailError by remember { mutableStateOf(false) }
     var passwordError by remember { mutableStateOf(false) }
+
+
 
     Scaffold { paddingValues ->
         Surface(modifier = Modifier.padding(paddingValues)) {
