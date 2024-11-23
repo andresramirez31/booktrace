@@ -110,6 +110,10 @@ fun LandscapeHomeLayout(navController: NavHostController){
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Button(
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.onPrimary,
+                            contentColor = MaterialTheme.colorScheme.primary
+                        ),
                         onClick = {
                             navController.navigate(Screen.Login.route)
                         }
@@ -120,6 +124,10 @@ fun LandscapeHomeLayout(navController: NavHostController){
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Button(
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.onPrimary,
+                            contentColor = MaterialTheme.colorScheme.primary
+                        ),
                         onClick = {
                             navController.navigate(Screen.SignUp.route)
                         }
