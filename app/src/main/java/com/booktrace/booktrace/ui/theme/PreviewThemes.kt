@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.booktrace.booktrace.Inicio
+import com.booktrace.booktrace.PreviewViewModel
 import com.booktrace.booktrace.ui.screens.LoginScreen
 import com.booktrace.booktrace.ui.screens.RecommendationsScreen
 import com.booktrace.booktrace.ui.screens.SignUpScreen
@@ -12,7 +13,7 @@ import com.booktrace.booktrace.ui.screens.SignUpScreen
 @Composable
 fun LightThemeHomePreviewPortrait(){
     BooktraceTheme(darkTheme = false) {
-        Inicio()
+        Inicio(viewModel = PreviewViewModel)
     }
 }
 
@@ -20,7 +21,7 @@ fun LightThemeHomePreviewPortrait(){
 @Composable
 fun LightThemeHomePreviewLandscape(){
     BooktraceTheme(darkTheme = false) {
-        Inicio()
+        Inicio(viewModel = previewViewModel)
     }
 }
 

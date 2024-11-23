@@ -1,4 +1,4 @@
-package com.booktrace.booktrace.models
+package com.booktrace.booktrace.ui.model
 
 data class Recommendation(
     val id: Int,
