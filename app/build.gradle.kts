@@ -69,7 +69,8 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation(libs.androidx.navigation.compose)
 
     //For Firebase
@@ -85,4 +86,6 @@ dependencies {
 
     implementation(libs.coil.compose) // For AsyncImage
     implementation(libs.material3) // For Card
+
+
 }
