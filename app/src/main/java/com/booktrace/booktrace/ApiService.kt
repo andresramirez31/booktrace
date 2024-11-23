@@ -16,5 +16,6 @@ interface ApiService {
     @GET("recommend")
     fun getRecommendation(
         @Query("user_id") userId: Int,
-        @Query("num_recommendations") numRecommendations: Int = 4): Call<List<Recommendation>>
+        @Query("num_recommendations") numRecommendations: Int = 4
+    ): Call<List<Recommendation>>
 }

@@ -4,13 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
@@ -18,13 +16,13 @@ import com.booktrace.booktrace.ui.navigation.SetupNavGraph
 import com.booktrace.booktrace.ui.theme.BooktraceTheme
 
 class MainActivity : ComponentActivity() {
-    private val viewModel: RecommendationViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        val viewModel: viewModel = viewModel()
         setContent {
             BooktraceTheme {
-               Inicio(viewModel)
+               Inicio()
             }
         }
     }
@@ -39,16 +37,10 @@ fun Bienvenida(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun Inicio(viewModel: RecommendationViewModel) {
+fun Inicio() {
     val navController = rememberNavController()
-
-    LaunchedEffect(Unit) {
-        viewModel.fetchRecommendations(userId = 10)
-    }
-
     SetupNavGraph(navController = navController)
 }
-
 
 @Preview(showBackground = true)
 @Composable

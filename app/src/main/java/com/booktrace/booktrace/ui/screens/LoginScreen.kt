@@ -41,8 +41,6 @@ fun LoginScreen(navController: NavController,
     val configuration = LocalConfiguration.current
     var loginError by remember { mutableStateOf(false) }
 
-
-
     LoginLayout(
         orientation = configuration.orientation,
         loginError = loginError,

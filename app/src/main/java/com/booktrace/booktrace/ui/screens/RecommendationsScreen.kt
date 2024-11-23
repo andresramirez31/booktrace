@@ -1,6 +1,7 @@
 package com.booktrace.booktrace.ui.screens
 
 import android.content.res.Configuration
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -44,11 +45,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.booktrace.booktrace.R
 import com.booktrace.booktrace.ui.navigation.Screen
 import com.booktrace.booktrace.viewModel
+import com.booktrace.booktrace.RecommendationViewModel
 
 @Composable
 fun RecommendationsScreen(
@@ -57,6 +60,17 @@ fun RecommendationsScreen(
 ) {
     val configuration = LocalConfiguration.current
     val context = LocalContext.current
+    val userId = viewModel.getCurrentUser()?.uid
+
+    val id = userId ?: "1"
+    val idInt = id.filter { it.isDigit() }.toInt()
+    Log.d("Booktrace","id: $idInt")
+
+    val recommendationViewModel: RecommendationViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+
+    LaunchedEffect(Unit) {
+        recommendationViewModel.fetchRecommendations(idInt)
+    }
 
     Scaffold(
         topBar = {
@@ -83,11 +97,11 @@ fun RecommendationsScreen(
                         horizontalArrangement = Arrangement.SpaceAround,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        RecommendationsContent(columns = 4)
+                        RecommendationsContent(viewModel = recommendationViewModel, columns = 4)
                     }
                 }
                 else -> {
-                    RecommendationsContent(columns = 2)
+                    RecommendationsContent(viewModel = recommendationViewModel, columns = 2)
                 }
             }
         }
@@ -168,10 +182,10 @@ fun RecommendationsTopBar(
 }
 
 @Composable
-fun RecommendationsContent(viewModel: viewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
+fun RecommendationsContent(viewModel: RecommendationViewModel,
                            columns: Int
 ) {
-    val books by viewModel.bookList.collectAsStateWithLifecycle()
+    val books = viewModel.recommendations.value
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(columns),
@@ -190,14 +204,7 @@ fun RecommendationsContent(viewModel: viewModel = androidx.lifecycle.viewmodel.c
                         .padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    AsyncImage(
-                        model = book.coverImageUrl,
-                        contentDescription = book.title,
-                        modifier = Modifier
-                            .size(150.dp)
-                            .clip(RoundedCornerShape(8.dp)),
-                        contentScale = ContentScale.Crop
-                    )
+
 
                     Text(
                         text = book.title,
@@ -206,7 +213,7 @@ fun RecommendationsContent(viewModel: viewModel = androidx.lifecycle.viewmodel.c
                     )
 
                     Text(
-                        text = book.author,
+                        text = book.authors,
                         style = MaterialTheme.typography.bodySmall,
                         modifier = Modifier.padding(top = 4.dp)
                     )

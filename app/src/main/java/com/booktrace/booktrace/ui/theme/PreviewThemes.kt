@@ -13,7 +13,7 @@ import com.booktrace.booktrace.ui.screens.SignUpScreen
 @Composable
 fun LightThemeHomePreviewPortrait(){
     BooktraceTheme(darkTheme = false) {
-        Inicio(viewModel = PreviewViewModel)
+        Inicio()
     }
 }
 
@@ -21,7 +21,7 @@ fun LightThemeHomePreviewPortrait(){
 @Composable
 fun LightThemeHomePreviewLandscape(){
     BooktraceTheme(darkTheme = false) {
-        Inicio(viewModel = previewViewModel)
+        Inicio()
     }
 }
 
