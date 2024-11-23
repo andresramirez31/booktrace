@@ -18,17 +18,27 @@ class RecommendationViewModel : ViewModel() {
     fun fetchRecommendations(userId: Int, numRecommendations: Int = 4) {
         viewModelScope.launch {
             try {
-                val response = RetrofitClient.instance.getRecommendation(userId, numRecommendations).execute()
-                if (response.isSuccessful) {
-                    _recommendations.value = response.body() ?: emptyList()
-                } else {
-                    // Manejar error
-                    _recommendations.value = emptyList()
-                }
+                RetrofitClient.instance.getRecommendation(userId, numRecommendations)
+                    .enqueue(object : Callback<List<List<Recommendation>>> {
+                        override fun onResponse(
+                            call: Call<List<List<Recommendation>>>,
+                            response: Response<List<List<Recommendation>>>
+                        ) {
+                            if (response.isSuccessful) {
+                                _recommendations.value = response.body()?.flatten() ?: emptyList()
+                            } else {
+                                Log.e("RecommendationViewModel", "Error: ${response.code()}")
+                                _recommendations.value = emptyList()
+                            }
+                        }
+
+                        override fun onFailure(call: Call<List<List<Recommendation>>>, t: Throwable) {
+                            Log.e("RecommendationViewModel", "Failure: ${t.message}")
+                            _recommendations.value = emptyList()
+                        }
+                    })
             } catch (e: Exception) {
-                // Manejar fallo en la llamada
-                e.printStackTrace()
-                Log.e("RecommendationViewModel", "Error fetching recommendations: ${e.message}")
+                Log.e("RecommendationViewModel", "Error: ${e.message}")
                 _recommendations.value = emptyList()
             }
         }

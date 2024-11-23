@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.booktrace.booktrace.Inicio
-import com.booktrace.booktrace.PreviewViewModel
 import com.booktrace.booktrace.ui.screens.LoginScreen
 import com.booktrace.booktrace.ui.screens.RecommendationsScreen
 import com.booktrace.booktrace.ui.screens.SignUpScreen

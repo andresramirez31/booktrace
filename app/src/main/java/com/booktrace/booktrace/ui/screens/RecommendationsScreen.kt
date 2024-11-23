@@ -205,7 +205,6 @@ fun RecommendationsContent(viewModel: RecommendationViewModel,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
 
-
                     Text(
                         text = book.title,
                         style = MaterialTheme.typography.bodyMedium,
